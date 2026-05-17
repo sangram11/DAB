@@ -1,0 +1,15 @@
+resources:
+  jobs:
+    job_hello_world:
+      name: job_hello_world
+      tasks:
+        - task_key: task_hello_world
+          notebook_task:
+            notebook_path: ../../src/notebooks/hello_world.ipynb
+            base_parameters:
+              catalog_name: ${var.catalog_name}
+              schema_name: ${var.schema_name}
+            source: WORKSPACE
+      queue:
+        enabled: true
+      performance_target: PERFORMANCE_OPTIMIZED
