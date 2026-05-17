@@ -1,0 +1,42 @@
+# This is a Databricks asset bundle definition for DAB.
+# See https://docs.databricks.com/dev-tools/bundles/index.html for documentation.
+bundle:
+  name: DAB
+  uuid: 5963f591-5e10-408d-b58b-055637e8d3f1
+
+include:
+  - resources/*.yml
+  - resources/*/*.yml
+
+# Variable declarations. These variables are assigned in the dev/prod targets below.
+variables:
+  catalog_name:
+    description: The catalog to use
+  schema_name:
+    description: The schema to use
+
+targets:
+  dev:
+    # The default target uses 'mode: development' to create a development copy.
+    # - Deployed resources get prefixed with '[dev my_user_name]'
+    # - Any job schedules and triggers are paused by default.
+    # See also https://docs.databricks.com/dev-tools/bundles/deployment-modes.html.
+    mode: development
+    default: true
+    workspace:
+      host: https://dbc-6677d92b-629d.cloud.databricks.com
+    variables:
+      catalog_name: dev
+      schema_name: default
+  stage:
+    mode: production
+    workspace:
+      host: https://dbc-7bd924e7-7d40.cloud.databricks.com
+      # We explicitly deploy to /Workspace/Users/odisha532@hotmail.com to make sure we only have a single copy.
+      root_path: /Workspace/Users/odisha532@hotmail.com/${bundle.target}
+    variables:
+      catalog_name: stage
+      schema_name: default
+    permissions:
+      - user_name: odisha532@hotmail.com
+        level: CAN_MANAGE
